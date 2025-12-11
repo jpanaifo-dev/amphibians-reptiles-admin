@@ -1,32 +1,66 @@
 'use server';
 
-import { authService, LoginRequest } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 import { ApiError } from '@/lib/api-errors';
 import { redirect } from 'next/navigation';
 import { APP_ROUTES } from '@/config/app-routes';
+import { LoginSchema } from '@/lib/definitions';
+import { createSession } from '@/lib/session';
 
-export async function loginAction(formData: FormData) {
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+export type FormState = {
+    errors?: {
+        username?: string[];
+        password?: string[];
+        _form?: string[];
+    };
+    message?: string;
+} | undefined;
 
-    if (!email || !password) {
-        return { error: 'Missing credentials' };
+export async function loginAction(prevState: FormState, formData: FormData): Promise<FormState> {
+    // 1. Validate Fields with Zod
+    const validatedFields = LoginSchema.safeParse({
+        username: formData.get('username'),
+        password: formData.get('password'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Login.',
+        };
     }
 
-    try {
-        const response = await authService.login({ email, password });
+    const { username, password } = validatedFields.data;
 
-        // In a real app, you would set the cookie here
-        // cookies().set('token', response.token);
-        console.log('Login successful:', response.user);
+    try {
+        // 2. Call API Service
+        const response = await authService.login({ username, password });
+
+        // 3. Handle Business Logic based on Response Status
+        if (response.status !== 200 || !response.data) {
+            // Map API errors to form state
+            return {
+                message: response.errors?.[0] || 'Invalid credentials',
+                errors: {
+                    _form: response.errors
+                }
+            };
+        }
+
+        // 4. Create Session
+        await createSession({
+            token: response.data.token,
+            user: response.data.user,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Placeholder, handled inside createSession too
+        });
 
     } catch (error) {
         if (ApiError.isApiError(error)) {
-            return { error: error.message }; // Return friendly error message
+            return { message: error.message };
         }
-        return { error: 'Something went wrong' };
+        return { message: 'Something went wrong.' };
     }
 
-    // Redirect on success
-    redirect(APP_ROUTES.DASHBOARD.ROOT);
+    // 5. Redirect on Success
+    redirect(APP_ROUTES.ADMIN);
 }
