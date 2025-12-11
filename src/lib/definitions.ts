@@ -43,3 +43,63 @@ export type LoginFormData = z.infer<typeof LoginSchema>;
 export interface SessionPayload extends ICredentials {
     expiresAt: Date;
 }
+
+// ============================================================================
+// Additional Types for Services
+// ============================================================================
+
+/**
+ * Generic API response wrapper
+ */
+export interface ApiResponse<T> {
+    data: T;
+    message?: string;
+    status?: number;
+    success?: boolean;
+}
+
+/**
+ * Paginated response
+ */
+export interface PaginatedResponse<T> {
+    data: T[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+}
+
+/**
+ * Query parameters for pagination and search
+ */
+export interface SearchParams {
+    page?: number;
+    pageSize?: number;
+    limit?: number;
+    query?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+}
+
+/**
+ * User creation data
+ */
+export interface CreateUserData {
+    username: string;
+    email: string;
+    password: string;
+    role?: IUser['role'];
+}
+
+/**
+ * User update data
+ */
+export interface UpdateUserData {
+    username?: string;
+    email?: string;
+    role?: IUser['role'];
+    status?: IUser['status'];
+}
+
+// Type alias for compatibility
+export type User = IUser;

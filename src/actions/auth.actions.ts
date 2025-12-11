@@ -48,11 +48,9 @@ export async function loginAction(prevState: FormState, formData: FormData): Pro
         }
 
         // 4. Create Session
-        await createSession({
-            token: response.data.token,
-            user: response.data.user,
-            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Placeholder, handled inside createSession too
-        });
+        if (response.data) {
+            await createSession(response.data);
+        }
 
     } catch (error) {
         if (ApiError.isApiError(error)) {
@@ -62,5 +60,5 @@ export async function loginAction(prevState: FormState, formData: FormData): Pro
     }
 
     // 5. Redirect on Success
-    redirect(APP_ROUTES.ADMIN);
+    redirect(APP_ROUTES.ADMIN.ROOT);
 }
