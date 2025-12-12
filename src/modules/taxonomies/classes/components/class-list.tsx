@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { classService } from '@/modules/taxonomies/classes/services/class.service';
+import { deleteClassAction } from '../actions';
 import { useRouter } from '@/i18n/routing';
 
 interface ClassListProps {
@@ -25,9 +25,13 @@ export function ClassList({ items }: ClassListProps) {
     const handleDelete = async (id: number) => {
         if (!confirm('¿Estás seguro de eliminar esta clase?')) return;
         try {
-            await classService.delete(id);
-            toast.success('Clase eliminada correctamente');
-            router.refresh(); // Refresh server component
+            const res = await deleteClassAction(id);
+            if (res.success) {
+                toast.success(res.message);
+                router.refresh();
+            } else {
+                toast.error(res.message);
+            }
         } catch (error) {
             toast.error('Error al eliminar la clase');
         }
