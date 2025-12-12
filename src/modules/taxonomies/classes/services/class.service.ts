@@ -8,15 +8,12 @@ import type {
     SearchParams,
     ApiResponse
 } from '@/lib/definitions';
+import { buildSearchParams } from '@/lib/utils';
 
 export const classService = {
-    getAll: async (params?: SearchParams): Promise<ApiResponse<PaginatedResponse<ITaxonomyClass>>> => {
-        const searchParams = new URLSearchParams();
-        if (params?.page) searchParams.set('page', params.page.toString());
-        if (params?.pageSize) searchParams.set('pageSize', params.pageSize.toString());
-        if (params?.query) searchParams.set('query', params.query);
-
-        const url = `${API_ROUTES.TAXONOMY.CLASSES.GET_ADMIN}?${searchParams.toString()}`;
+    getAll: async (params?: SearchParams & { name?: string; status?: number }): Promise<PaginatedResponse<ITaxonomyClass>> => {
+        const queryParams = buildSearchParams(params || {});
+        const url = `${API_ROUTES.TAXONOMY.CLASSES.GET_ADMIN}?${queryParams.toString()}`;
         return httpClient.get(url);
     },
 

@@ -20,15 +20,16 @@ export default async function Page(props: PageProps) {
             pageSize: limit,
             query,
         });
+        console.log(response);
 
         return (
             <>
-                <ClassList items={response.data?.data || []} />
+                <ClassList items={response.data || []} />
                 <PaginationCustom
-                    totalPages={response.data?.totalPages || 1}
-                    page={response.data?.page || 1}
+                    totalPages={response.totalPages || 1}
+                    page={response.page || 1}
                     limit={limit}
-                    total={response.data?.total || 0}
+                    total={response.total || 0}
                 />
             </>
         )

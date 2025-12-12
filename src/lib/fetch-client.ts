@@ -1,3 +1,4 @@
+'use server'
 import { ENV } from '@/config/env';
 import { getSession } from './session';
 
@@ -31,6 +32,5 @@ export async function fetchClient(path: string, options: RequestInit) {
     ) {
         headersObj['Content-Type'] = 'application/json';
     }
-
     return fetch(url, newOptions);
 }
