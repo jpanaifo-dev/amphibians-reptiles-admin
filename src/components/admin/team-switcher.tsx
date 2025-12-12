@@ -8,7 +8,6 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -22,9 +21,41 @@ import {
 export function TeamSwitcher() {
     const { isMobile } = useSidebar()
     const activeTeam = {
-        name: "IIAP Admin",
+        name: "Anfibios y Reptiles",
         logo: ShieldCheck,
         plan: "Administrador",
+    }
+
+    // Mock list of teams, currently only one. 
+    // In future this could come from props or context.
+    const teams = [activeTeam];
+
+    const MenuButtonContent = (
+        <SidebarMenuButton
+            size="lg"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <activeTeam.logo className="size-4" />
+            </div>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">
+                    {activeTeam.name}
+                </span>
+                <span className="truncate text-xs">{activeTeam.plan}</span>
+            </div>
+            {teams.length > 1 && <ChevronsUpDown className="ml-auto" />}
+        </SidebarMenuButton>
+    )
+
+    if (teams.length <= 1) {
+        return (
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    {MenuButtonContent}
+                </SidebarMenuItem>
+            </SidebarMenu>
+        )
     }
 
     return (
@@ -32,21 +63,7 @@ export function TeamSwitcher() {
             <SidebarMenuItem>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton
-                            size="lg"
-                            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                        >
-                            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                                <activeTeam.logo className="size-4" />
-                            </div>
-                            <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-semibold">
-                                    {activeTeam.name}
-                                </span>
-                                <span className="truncate text-xs">{activeTeam.plan}</span>
-                            </div>
-                            <ChevronsUpDown className="ml-auto" />
-                        </SidebarMenuButton>
+                        {MenuButtonContent}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"

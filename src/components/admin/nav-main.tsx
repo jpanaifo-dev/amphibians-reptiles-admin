@@ -44,7 +44,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                                         <Link href={item.url} className='flex-1'>
                                             <span>{item.title}</span>
                                         </Link>
-                                        {item.items && item.items.length > 0 && (
+                                        {item.items && item.items.length > 1 && (
                                             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                         )}
                                     </SidebarMenuButton>
