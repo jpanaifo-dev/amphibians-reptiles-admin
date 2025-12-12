@@ -91,4 +91,7 @@ export const fetchMethods = {
     put,
     patch,
     del,
+    delete: del,
 };
+
+export const httpClient = fetchMethods;
