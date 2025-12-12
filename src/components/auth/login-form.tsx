@@ -5,10 +5,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, LoginFormData } from '@/lib/definitions';
 import { loginAction } from '@/actions/auth.actions';
-import Link from 'next/link';
+import { Link, useRouter } from '@/i18n/routing';
 import { APP_ROUTES } from '@/config/app-routes';
-import { useRouter } from 'next/navigation';
-
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +16,7 @@ import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function LoginForm() {
+    const t = useTranslations('Auth.login');
     const [isPending, startTransition] = useTransition();
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
@@ -41,13 +41,13 @@ export function LoginForm() {
                 const user = result.data?.user;
                 const name = user?.person?.firstname || user?.username || 'User';
 
-                toast.success(`Bienvenido ${name}`, {
-                    description: 'Acceso concedido exitosamente.',
+                toast.success(t('success', { name }), {
+                    description: t('successDesc'),
                     duration: 3000,
                 });
                 router.push(APP_ROUTES.ADMIN.ROOT);
             } else if (result?.message) {
-                toast.error('Error de Inicio de Sesión', {
+                toast.error(t('errorTitle'), {
                     description: result.message,
                 });
             }
@@ -57,9 +57,9 @@ export function LoginForm() {
     return (
         <div className="w-full space-y-6">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
+                <h1 className="text-2xl font-semibold tracking-tight">{t('title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                    Enter your credentials to access the admin panel
+                    {t('subtitle')}
                 </p>
             </div>
 
@@ -70,7 +70,7 @@ export function LoginForm() {
                         name="username"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>{t('username')}</FormLabel>
                                 <FormControl>
                                     <Input placeholder="jdoe" disabled={isPending} {...field} />
                                 </FormControl>
@@ -84,7 +84,7 @@ export function LoginForm() {
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>{t('password')}</FormLabel>
                                 <FormControl>
                                     <div className="relative">
                                         <Input
@@ -121,10 +121,10 @@ export function LoginForm() {
                         {isPending ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Signing In...
+                                {t('submitting')}
                             </>
                         ) : (
-                            'Sign In'
+                            t('submit')
                         )}
                     </Button>
                 </form>
@@ -135,14 +135,14 @@ export function LoginForm() {
                     href={APP_ROUTES.HOME}
                     className="underline underline-offset-4 hover:text-primary"
                 >
-                    Back to Home
+                    {t('backToHome')}
                 </Link>
                 <span className="mx-2">|</span>
                 <Link
                     href={APP_ROUTES.AUTH.REGISTER}
                     className="underline underline-offset-4 hover:text-primary"
                 >
-                    Register
+                    {t('register')}
                 </Link>
             </div>
         </div>

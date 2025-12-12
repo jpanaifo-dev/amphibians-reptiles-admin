@@ -1,0 +1,23 @@
+{
+    "Auth": {
+        "login": {
+            "title": "Iniciar Sesión",
+            "subtitle": "Ingresa tus credenciales para acceder al panel de administración",
+            "username": "Usuario",
+            "password": "Contraseña",
+            "submit": "Ingresar",
+            "submitting": "Ingresando...",
+            "backToHome": "Volver al Inicio",
+            "register": "Registrarse",
+            "success": "Bienvenido {name}",
+            "successDesc": "Acceso concedido exitosamente.",
+            "errorTitle": "Error de Inicio de Sesión"
+        }
+    },
+    "Landing": {
+        "title": "Para comenzar, edita el archivo page.tsx",
+        "description": "Aplicación Administrativa de Anfibios y Reptiles",
+        "docs": "Documentación",
+        "deploy": "Desplegar"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "Auth": {
+        "login": {
+            "title": "Login",
+            "subtitle": "Enter your credentials to access the admin panel",
+            "username": "Username",
+            "password": "Password",
+            "submit": "Sign In",
+            "submitting": "Signing In...",
+            "backToHome": "Back to Home",
+            "register": "Register",
+            "success": "Welcome {name}",
+            "successDesc": "Login successful.",
+            "errorTitle": "Login Failed"
+        }
+    },
+    "Landing": {
+        "title": "To get started, edit the page.tsx file",
+        "description": "Amphibians & Reptiles Admin App",
+        "docs": "Documentation",
+        "deploy": "Deploy Now"
+    }
+}
