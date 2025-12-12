@@ -9,10 +9,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
     return (
-        <AuthLayout
-            title="Admin Portal"
-            subtitle="Manage your amphibian and reptile data securely."
-        >
+        <AuthLayout>
             <LoginForm />
         </AuthLayout>
     );
