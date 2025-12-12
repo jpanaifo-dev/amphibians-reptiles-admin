@@ -21,23 +21,6 @@ export interface IPerson {
     updatedAt: string;
     cti_vitae: string;
 }
-
-export interface ICredentials {
-    token: string;
-    user: IUser;
-}
-
-export interface IResposeLogin {
-    status: number;
-    data?: ICredentials;
-    errors?: string[];
-}
-
-export const LoginSchema = z.object({
-    username: z.string().min(1, 'Username is required'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
 export type LoginFormData = z.infer<typeof LoginSchema>;
 
 export interface SessionPayload extends ICredentials {

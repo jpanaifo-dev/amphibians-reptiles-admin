@@ -36,21 +36,15 @@ export async function loginAction(prevState: FormState, formData: FormData): Pro
         // 2. Call API Service
         const response = await authService.login({ username, password });
 
-        // 3. Handle Business Logic based on Response Status
-        if (response.status !== 200 || !response.data) {
-            // Map API errors to form state
-            return {
-                message: response.errors?.[0] || 'Invalid credentials',
-                errors: {
-                    _form: response.errors
-                }
-            };
+        // 3. Create Session (Success path - checks for direct properties)
+        if (response.token && response.user) {
+            await createSession(response);
+            // 5. Redirect on Success
+            redirect(APP_ROUTES.ADMIN.ROOT);
         }
 
-        // 4. Create Session
-        if (response.data) {
-            await createSession(response.data);
-        }
+        // Return error if response format is invalid
+        return { message: 'Invalid server response.' };
 
     } catch (error) {
         if (ApiError.isApiError(error)) {
@@ -59,6 +53,5 @@ export async function loginAction(prevState: FormState, formData: FormData): Pro
         return { message: 'Something went wrong.' };
     }
 
-    // 5. Redirect on Success
-    redirect(APP_ROUTES.ADMIN.ROOT);
+
 }

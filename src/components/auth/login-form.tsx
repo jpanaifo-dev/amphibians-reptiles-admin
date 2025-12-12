@@ -5,27 +5,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, LoginFormData } from '@/lib/definitions';
 import { loginAction } from '@/actions/auth.actions';
+import Link from 'next/link';
+import { APP_ROUTES } from '@/config/app-routes';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, Loader2 } from 'lucide-react';
-// import { toast } from 'sonner';
-
-// Note: Ensure you have a toaster component in your layout if you want to use toast()
-// For now, I will use inline error states as primary feedback mechanism 
-// to match the robust error handling required.
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 
 export function LoginForm() {
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<LoginFormData>({
+    const form = useForm<LoginFormData>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
             username: '',
@@ -40,54 +33,76 @@ export function LoginForm() {
             formData.append('username', data.username);
             formData.append('password', data.password);
 
-            // We call the Server Action manually here to handle the response
-            // This bridges React Hook Form (Client Validation) with Server Actions (Secure Logic)
             const result = await loginAction(undefined, formData);
 
             if (result?.message) {
                 setServerError(result.message);
-                // toast.error(result.message); // Uncomment if 'sonner' or 'react-toastify' is setup
             }
         });
     };
 
     return (
-        <Card className="w-full max-w-sm mx-auto shadow-lg">
-            <CardHeader>
-                <CardTitle className="text-2xl font-bold text-center">Admin Login</CardTitle>
-                <CardDescription className="text-center">
-                    Enter your credentials to access the dashboard
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="username">Username</Label>
-                        <Input
-                            id="username"
-                            placeholder="jdoe"
-                            disabled={isPending}
-                            {...register('username')}
-                            aria-invalid={!!errors.username}
-                        />
-                        {errors.username && (
-                            <p className="text-sm text-destructive font-medium">{errors.username.message}</p>
-                        )}
-                    </div>
+        <div className="w-full space-y-6">
+            <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
+                <p className="text-sm text-muted-foreground">
+                    Enter your credentials to access the admin panel
+                </p>
+            </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            disabled={isPending}
-                            {...register('password')}
-                            aria-invalid={!!errors.password}
-                        />
-                        {errors.password && (
-                            <p className="text-sm text-destructive font-medium">{errors.password.message}</p>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="jdoe" disabled={isPending} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )}
-                    </div>
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <div className="relative">
+                                        <Input
+                                            type={showPassword ? "text" : "password"}
+                                            disabled={isPending}
+                                            className="pr-10"
+                                            {...field}
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            disabled={isPending}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                            ) : (
+                                                <Eye className="h-4 w-4 text-muted-foreground" />
+                                            )}
+                                            <span className="sr-only">
+                                                {showPassword ? "Hide password" : "Show password"}
+                                            </span>
+                                        </Button>
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
                     {serverError && (
                         <div className="p-3 rounded-md bg-destructive/15 text-destructive text-sm flex items-center gap-2">
@@ -107,12 +122,23 @@ export function LoginForm() {
                         )}
                     </Button>
                 </form>
-            </CardContent>
-            <CardFooter className="flex justify-center">
-                <p className="text-xs text-muted-foreground text-center">
-                    Protected by secure session management.
-                </p>
-            </CardFooter>
-        </Card>
+            </Form>
+
+            <div className="text-center text-sm text-muted-foreground">
+                <Link
+                    href={APP_ROUTES.HOME}
+                    className="underline underline-offset-4 hover:text-primary"
+                >
+                    Back to Home
+                </Link>
+                <span className="mx-2">|</span>
+                <Link
+                    href={APP_ROUTES.AUTH.REGISTER}
+                    className="underline underline-offset-4 hover:text-primary"
+                >
+                    Register
+                </Link>
+            </div>
+        </div>
     );
 }
