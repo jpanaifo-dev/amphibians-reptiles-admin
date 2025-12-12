@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, type LucideIcon } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import {
     Collapsible,
     CollapsibleContent,
@@ -16,19 +16,35 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem
 } from '@/components/ui/sidebar'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { usePathname } from 'next/navigation'
 import { NavItem } from '@/config/menu-data'
+import { useTranslations } from 'next-intl'
 
 export function NavMain({ items }: { items: NavItem[] }) {
     const pathname = usePathname()
+    const t = useTranslations()
 
     return (
         <SidebarGroup>
-            <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('Sidebar.platform')}</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => {
-                    const isActive = pathname === item.url || (item.items?.some(sub => pathname.startsWith(sub.url)) ?? false);
+                    const hasSubItems = item.items && item.items.length > 0;
+                    const isActive = pathname.includes(item.url);
+
+                    if (!hasSubItems) {
+                        return (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild tooltip={t(item.title)} isActive={isActive}>
+                                    <Link href={item.url}>
+                                        {item.icon && <item.icon />}
+                                        <span>{t(item.title)}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        )
+                    }
 
                     return (
                         <Collapsible
@@ -39,23 +55,19 @@ export function NavMain({ items }: { items: NavItem[] }) {
                         >
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
-                                    <SidebarMenuButton tooltip={item.title} isActive={isActive}>
+                                    <SidebarMenuButton tooltip={t(item.title)} isActive={isActive}>
                                         {item.icon && <item.icon />}
-                                        <Link href={item.url} className='flex-1'>
-                                            <span>{item.title}</span>
-                                        </Link>
-                                        {item.items && item.items.length > 1 && (
-                                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                        )}
+                                        <span>{t(item.title)}</span>
+                                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                     </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                     <SidebarMenuSub>
                                         {item.items?.map((subItem) => (
                                             <SidebarMenuSubItem key={subItem.title}>
-                                                <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
+                                                <SidebarMenuSubButton asChild isActive={pathname.includes(subItem.url)}>
                                                     <Link href={subItem.url}>
-                                                        <span>{subItem.title}</span>
+                                                        <span>{t(subItem.title)}</span>
                                                     </Link>
                                                 </SidebarMenuSubButton>
                                             </SidebarMenuSubItem>

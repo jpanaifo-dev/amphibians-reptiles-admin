@@ -19,5 +19,14 @@
         "description": "Amphibians & Reptiles Admin App",
         "docs": "Documentation",
         "deploy": "Deploy Now"
+    },
+    "Sidebar": {
+        "home": "Home",
+        "collections": "Collections",
+        "allCollections": "All Collections",
+        "newCollection": "Add New",
+        "users": "Users",
+        "settings": "Settings",
+        "platform": "Platform"
     }
 }

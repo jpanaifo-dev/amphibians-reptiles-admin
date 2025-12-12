@@ -19,5 +19,14 @@
         "description": "Aplicación Administrativa de Anfibios y Reptiles",
         "docs": "Documentación",
         "deploy": "Desplegar"
+    },
+    "Sidebar": {
+        "home": "Inicio",
+        "collections": "Colecciones",
+        "allCollections": "Todas las Colecciones",
+        "newCollection": "Añadir Nueva",
+        "users": "Usuarios",
+        "settings": "Configuración",
+        "platform": "Plataforma"
     }
 }

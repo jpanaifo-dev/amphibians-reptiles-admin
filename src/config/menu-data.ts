@@ -27,33 +27,33 @@ export interface NavMainType {
 export const adminMenuData: NavMainType = {
     navMain: [
         {
-            title: 'Inicio',
+            title: 'Sidebar.home',
             url: '/admin',
             icon: Home,
             isActive: true
         },
         {
-            title: 'Colecciones',
+            title: 'Sidebar.collections',
             url: '/admin/collections',
             icon: Layers,
             items: [
                 {
-                    title: 'Todas las Colecciones',
+                    title: 'Sidebar.allCollections',
                     url: '/admin/collections'
                 },
                 {
-                    title: 'Añadir Nueva',
+                    title: 'Sidebar.newCollection',
                     url: '/admin/collections/new'
                 }
             ]
         },
         {
-            title: 'Usuarios',
+            title: 'Sidebar.users',
             url: '/admin/users',
             icon: Users
         },
         {
-            title: 'Configuración',
+            title: 'Sidebar.settings',
             url: '/admin/settings',
             icon: Settings
         }
