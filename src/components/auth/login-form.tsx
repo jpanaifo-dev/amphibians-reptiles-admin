@@ -7,16 +7,19 @@ import { LoginSchema, LoginFormData } from '@/lib/definitions';
 import { loginAction } from '@/actions/auth.actions';
 import Link from 'next/link';
 import { APP_ROUTES } from '@/config/app-routes';
+import { useRouter } from 'next/navigation';
+
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function LoginForm() {
     const [isPending, startTransition] = useTransition();
-    const [serverError, setServerError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
     const form = useForm<LoginFormData>({
         resolver: zodResolver(LoginSchema),
@@ -27,7 +30,6 @@ export function LoginForm() {
     });
 
     const onSubmit = (data: LoginFormData) => {
-        setServerError(null);
         startTransition(async () => {
             const formData = new FormData();
             formData.append('username', data.username);
@@ -35,8 +37,19 @@ export function LoginForm() {
 
             const result = await loginAction(undefined, formData);
 
-            if (result?.message) {
-                setServerError(result.message);
+            if (result?.message === 'Login successful.') {
+                const user = result.data?.user;
+                const name = user?.person?.firstname || user?.username || 'User';
+
+                toast.success(`Bienvenido ${name}`, {
+                    description: 'Acceso concedido exitosamente.',
+                    duration: 3000,
+                });
+                router.push(APP_ROUTES.ADMIN.ROOT);
+            } else if (result?.message) {
+                toast.error('Error de Inicio de Sesión', {
+                    description: result.message,
+                });
             }
         });
     };
@@ -103,13 +116,6 @@ export function LoginForm() {
                             </FormItem>
                         )}
                     />
-
-                    {serverError && (
-                        <div className="p-3 rounded-md bg-destructive/15 text-destructive text-sm flex items-center gap-2">
-                            <AlertCircle size={16} />
-                            <span>{serverError}</span>
-                        </div>
-                    )}
 
                     <Button type="submit" className="w-full" disabled={isPending}>
                         {isPending ? (

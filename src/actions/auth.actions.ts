@@ -2,8 +2,6 @@
 
 import { authService } from '@/services/auth.service';
 import { ApiError } from '@/lib/api-errors';
-import { redirect } from 'next/navigation';
-import { APP_ROUTES } from '@/config/app-routes';
 import { LoginSchema } from '@/lib/definitions';
 import { createSession } from '@/lib/session';
 
@@ -14,6 +12,7 @@ export type FormState = {
         _form?: string[];
     };
     message?: string;
+    data?: any;
 } | undefined;
 
 export async function loginAction(prevState: FormState, formData: FormData): Promise<FormState> {
@@ -36,16 +35,17 @@ export async function loginAction(prevState: FormState, formData: FormData): Pro
         // 2. Call API Service
         const response = await authService.login({ username, password });
 
-        // 3. Create Session (Success path - checks for direct properties)
+        // 3. Create Session (Success path)
         if (response.token && response.user) {
             await createSession(response);
-            // 5. Redirect on Success
-            redirect(APP_ROUTES.ADMIN.ROOT);
+
+            return {
+                message: 'Login successful.',
+                data: response
+            };
         }
 
-        // Return error if response format is invalid
         return { message: 'Invalid server response.' };
-
     } catch (error) {
         if (ApiError.isApiError(error)) {
             return { message: error.message };

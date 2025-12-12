@@ -7,6 +7,7 @@ export interface IUser {
     status: string;
     createdAt: string;
     updatedAt: string;
+    person?: IPerson;
 }
 
 export interface IPerson {
