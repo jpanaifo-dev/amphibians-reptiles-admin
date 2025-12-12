@@ -26,7 +26,9 @@ export const classService = {
     },
 
     update: async (id: number, data: UpdateClassDto): Promise<ApiResponse<ITaxonomyClass>> => {
-        return httpClient.patch(API_ROUTES.TAXONOMY.CLASSES.UPDATE(id), data);
+        return httpClient.patch(API_ROUTES.TAXONOMY.CLASSES.UPDATE(id), {
+            name: data.name,
+        });
     },
 
     delete: async (id: number): Promise<ApiResponse<void>> => {

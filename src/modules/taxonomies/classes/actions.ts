@@ -12,3 +12,24 @@ export async function deleteClassAction(id: number) {
         return { success: false, message: 'Error al eliminar la clase' };
     }
 }
+
+export async function createClassAction(data: { name: string; status: number }) {
+    try {
+        await classService.create(data);
+        revalidatePath('/admin/classes');
+        return { success: true, message: 'Clase creada correctamente' };
+    } catch (error) {
+        return { success: false, message: 'Error al crear la clase' };
+    }
+}
+
+export async function updateClassAction(id: number, data: { name: string; status: number }) {
+    try {
+        const response = await classService.update(id, data);
+        console.log(response);
+        revalidatePath('/admin/classes');
+        return { success: true, message: 'Clase actualizada correctamente' };
+    } catch (error) {
+        return { success: false, message: 'Error al actualizar la clase' };
+    }
+}
