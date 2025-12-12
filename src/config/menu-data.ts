@@ -54,24 +54,24 @@ export const adminMenuData: NavMainType = {
         },
         {
             title: 'Sidebar.taxonomies',
-            url: '/admin/taxonomies',
-            icon: Layers, // You might want to import a different icon like 'Tag' or 'Database'
+            url: '#',
+            icon: Layers,
             items: [
                 {
                     title: 'Sidebar.classes',
-                    url: '/admin/taxonomies/classes'
+                    url: '/admin/classes'
                 },
                 {
                     title: 'Sidebar.orders',
-                    url: '/admin/taxonomies/orders'
+                    url: '/admin/orders'
                 },
                 {
                     title: 'Sidebar.families',
-                    url: '/admin/taxonomies/families'
+                    url: '/admin/families'
                 },
                 {
                     title: 'Sidebar.genera',
-                    url: '/admin/taxonomies/genera'
+                    url: '/admin/genera'
                 }
             ]
         },
