@@ -23,10 +23,9 @@ export async function createClassAction(data: { name: string; status: number }) 
     }
 }
 
-export async function updateClassAction(id: number, data: { name: string; status: number }) {
+export async function updateClassAction(id: number, data: { name: string; }) {
     try {
         const response = await classService.update(id, data);
-        console.log(response);
         revalidatePath('/admin/classes');
         return { success: true, message: 'Clase actualizada correctamente' };
     } catch (error) {
