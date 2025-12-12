@@ -26,6 +26,11 @@
         "allCollections": "All Collections",
         "newCollection": "Add New",
         "users": "Users",
+        "taxonomies": "Taxonomies",
+        "classes": "Classes",
+        "orders": "Orders",
+        "families": "Families",
+        "genera": "Genera",
         "settings": "Settings",
         "platform": "Platform"
     }

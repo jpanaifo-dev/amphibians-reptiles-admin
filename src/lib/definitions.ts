@@ -100,3 +100,26 @@ export interface UpdateUserData {
 
 // Type alias for compatibility
 export type User = IUser;
+
+// ===================================
+// Taxonomy: Classes
+// ===================================
+
+export interface ITaxonomyClass {
+    id: number;
+    name: string;
+    description?: string;
+    status: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface CreateClassDto {
+    name: string;
+    status: number;
+}
+
+export interface UpdateClassDto {
+    name?: string;
+    status?: number;
+}

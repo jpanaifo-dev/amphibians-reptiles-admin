@@ -53,6 +53,29 @@ export const adminMenuData: NavMainType = {
             icon: Users
         },
         {
+            title: 'Sidebar.taxonomies',
+            url: '/admin/taxonomies',
+            icon: Layers, // You might want to import a different icon like 'Tag' or 'Database'
+            items: [
+                {
+                    title: 'Sidebar.classes',
+                    url: '/admin/taxonomies/classes'
+                },
+                {
+                    title: 'Sidebar.orders',
+                    url: '/admin/taxonomies/orders'
+                },
+                {
+                    title: 'Sidebar.families',
+                    url: '/admin/taxonomies/families'
+                },
+                {
+                    title: 'Sidebar.genera',
+                    url: '/admin/taxonomies/genera'
+                }
+            ]
+        },
+        {
             title: 'Sidebar.settings',
             url: '/admin/settings',
             icon: Settings

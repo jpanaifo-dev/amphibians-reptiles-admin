@@ -27,7 +27,7 @@ export const API_ROUTES = {
         FORGOT_PASSWORD: `${BASE_URL}/auth/forgot-password`,
         RESET_PASSWORD: `${BASE_URL}/auth/reset-password`,
     },
-    
+
     // User management endpoints
     USERS: {
         GET_ALL: `${BASE_URL}/users`,
@@ -37,8 +37,16 @@ export const API_ROUTES = {
         DELETE: (id: string | number) => `${BASE_URL}/users/${id}`,
         SEARCH: `${BASE_URL}/users/search`,
     },
-    
-    // Add more entities as needed
-    // POSTS: {...},
-    // COMMENTS: {...},
+
+    // Taxonomy endpoints
+    TAXONOMY: {
+        CLASSES: {
+            GET_ALL: `${BASE_URL}/classes`,
+            GET_ADMIN: `${BASE_URL}/classes/admin`,
+            GET_BY_ID: (id: string | number) => `${BASE_URL}/classes/${id}`,
+            CREATE: `${BASE_URL}/classes`,
+            UPDATE: (id: string | number) => `${BASE_URL}/classes/${id}`,
+            DELETE: (id: string | number) => `${BASE_URL}/classes/${id}`,
+        }
+    }
 } as const;
