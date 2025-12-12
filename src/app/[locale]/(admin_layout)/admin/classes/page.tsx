@@ -16,11 +16,10 @@ export default async function Page(props: PageProps) {
 
     try {
         const response = await classService.getAll({
+            name: query,
             page,
             pageSize: limit,
-            query,
         });
-        console.log(response);
 
         return (
             <>
